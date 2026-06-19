@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CourseHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0F1B2D;
+      --navy2:   #162436;
+      --slate:   #2E4260;
+      --muted:   #5C7A9A;
+      --amber:   #E8A838;
+      --amber2:  #F5C05A;
+      --cream:   #F0EBE1;
+      --cream2:  #FAF7F3;
+      --white:   #FFFFFF;
+      --danger:  #D94F4F;
+      --green:   #3BAA72;
+      --radius:  10px;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--navy);
+      color: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP NAV ── */
+    header {
+      background: var(--navy2);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--amber);
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+    }
+
+    nav {
+      display: flex;
+      gap: 4px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--cream);
+      background: rgba(255,255,255,0.07);
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header-inner {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--amber);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .page-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── UPLOAD BTN ── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--amber);
+      color: var(--navy);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius);
+      padding: 10px 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, transform 0.1s;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover { background: var(--amber2); }
+    .btn-primary:active { transform: scale(0.97); }
+
+    /* ── DIVIDER / ACCENT BAR ── */
+    .accent-bar {
+      height: 3px;
+      background: linear-gradient(90deg, var(--amber) 0%, var(--amber2) 40%, rgba(232,168,56,0) 100%);
+      border-radius: 2px;
+      margin-bottom: 28px;
+    }
+
+    /* ── FILTER ROW ── */
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .filter-select {
+      appearance: none;
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--cream);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      padding: 8px 36px 8px 14px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C7A9A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: border-color 0.15s;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--amber);
+    }
+
+    .filter-btn {
+      background: var(--slate);
+      color: var(--cream);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius);
+      padding: 8px 18px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .filter-btn:hover { background: var(--muted); }
+
+    /* ── DOCUMENT CARDS ── */
+    .doc-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .doc-card {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .doc-card:hover {
+      border-color: rgba(232,168,56,0.3);
+      background: rgba(22,36,54,0.9);
+    }
+
+    .doc-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 52px;
+      background: var(--slate);
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: 1px;
+      border-top: 3px solid var(--amber);
+    }
+
+    .doc-info { flex: 1; min-width: 0; }
+
+    .doc-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .doc-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border-radius: 4px;
+      padding: 3px 8px;
+    }
+
+    .chip-course {
+      background: rgba(232,168,56,0.15);
+      color: var(--amber);
+    }
+
+    .chip-type {
+      background: rgba(94,124,154,0.2);
+      color: #8AB0D0;
+    }
+
+    .meta-sep { color: rgba(255,255,255,0.15); }
+
+    .meta-text {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── DOC ACTIONS ── */
+    .doc-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid rgba(232,168,56,0.4);
+      color: var(--amber);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 7px 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .btn-download:hover {
+      background: rgba(232,168,56,0.1);
+      border-color: var(--amber);
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid rgba(217,79,79,0.3);
+      color: #D94F4F;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 7px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-delete:hover {
+      background: rgba(217,79,79,0.1);
+      border-color: var(--danger);
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--muted);
+    }
+
+    .empty-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .empty-state p { font-size: 0.95rem; line-height: 1.6; }
+    .empty-state strong { color: var(--cream); }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      place-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.active { display: grid; }
+
+    .modal {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 32px;
+      max-width: 420px;
+      width: 90%;
+      animation: pop-in 0.2s ease;
+    }
+
+    @keyframes pop-in {
+      from { transform: scale(0.95); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .modal h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .modal p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .modal p strong { color: var(--cream); }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--muted);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 9px 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-cancel:hover { color: var(--cream); border-color: rgba(255,255,255,0.3); }
+
+    .btn-confirm-delete {
+      background: var(--danger);
+      border: none;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 9px 18px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-confirm-delete:hover { opacity: 0.85; }
+
+    /* ── UPLOAD PAGE ── */
+    .upload-page { display: none; }
+    .home-page   { display: block; }
+
+    .upload-card {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 40px 36px;
+      max-width: 520px;
+    }
+
+    .form-group { margin-bottom: 22px; }
+
+    .form-label {
+      display: block;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--cream);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      padding: 11px 14px;
+      border-radius: var(--radius);
+      transition: border-color 0.15s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--amber);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .file-drop {
+      border: 2px dashed rgba(255,255,255,0.15);
+      border-radius: var(--radius);
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .file-drop:hover, .file-drop.dragover {
+      border-color: var(--amber);
+      background: rgba(232,168,56,0.05);
+    }
+
+    .file-drop-icon { font-size: 2rem; margin-bottom: 10px; opacity: 0.5; }
+
+    .file-drop p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .file-drop span { color: var(--amber); font-weight: 600; }
+
+    #file-chosen {
+      font-size: 0.83rem;
+      color: var(--green);
+      margin-top: 10px;
+      display: block;
+    }
+
+    .form-actions { display: flex; gap: 10px; align-items: center; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--slate);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white);
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: all 0.25s;
+      z-index: 999;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      font-size: 0.78rem;
+      color: rgba(92,122,154,0.5);
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; }
+      main { padding: 28px 16px 60px; }
+      .doc-card { flex-wrap: wrap; }
+      .doc-actions { width: 100%; }
+      .upload-card { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="logo" onclick="showPage('home'); return false;">
+      <div class="logo-icon">📚</div>
+      CourseHub
+    </a>
+    <nav>
+      <a href="#" class="active" id="nav-home" onclick="showPage('home'); return false;">Home</a>
+      <a href="#" id="nav-upload" onclick="showPage('upload'); return false;">Upload</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HOME PAGE -->
+    <div class="home-page" id="home-page">
+      <div class="page-header">
+        <div class="page-header-inner">
+          <div>
+            <div class="page-eyebrow">Academic Library</div>
+            <h1>Course Materials</h1>
+            <p class="page-sub">Browse and download files for your courses</p>
+          </div>
+          <button class="btn-primary" onclick="showPage('upload')">
+            ＋ Upload File
+          </button>
+        </div>
+      </div>
+
+      <div class="accent-bar"></div>
+
+      <div class="filter-row">
+        <span class="filter-label">Filter by course</span>
+        <select class="filter-select" id="course-filter">
+          <option value="all">All Course Codes</option>
+        </select>
+        <button class="filter-btn" onclick="applyFilter()">Apply</button>
+      </div>
+
+      <div class="doc-list" id="doc-list">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- UPLOAD PAGE -->
+    <div class="upload-page" id="upload-page">
+      <div class="page-header">
+        <div class="page-eyebrow">Add Resource</div>
+        <h1>Upload a File</h1>
+        <p class="page-sub">Add a new course material to the vault</p>
+      </div>
+
+      <div class="accent-bar"></div>
+
+      <div class="upload-card">
+        <div class="form-group">
+          <label class="form-label" for="doc-title">Document Title</label>
+          <input class="form-input" id="doc-title" type="text" placeholder="e.g. Introduction to jQuery" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="course-code">Course Code</label>
+          <input class="form-input" id="course-code" type="text" placeholder="e.g. IFT302" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">File</label>
+          <div class="file-drop" id="file-drop" onclick="document.getElementById('file-input').click()">
+            <div class="file-drop-icon">📄</div>
+            <p>Drag & drop a file here, or <span>click to browse</span></p>
+          </div>
+          <span id="file-chosen">No file selected</span>
+          <input type="file" id="file-input" style="display:none" onchange="onFileChosen(this)" />
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="submitUpload()">Upload File</button>
+          <button class="btn-cancel" onclick="showPage('home')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>© 2026 CourseHub. All rights reserved.</footer>
+
+  <!-- DELETE MODAL -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal">
+      <h3>Delete this file?</h3>
+      <p>Are you sure you want to remove <strong id="modal-doc-name">"…"</strong>? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-confirm-delete" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── DATA STORE ──────────────────────────────────────────────
+    let docs = [
+      {
+        id: 1,
+        title: "Introduction to jQuery",
+        course: "IFT302",
+        type: "PDF",
+        size: "2.09 MB",
+        date: "Jun 19, 2026",
+        url: "https://coursevault.up.railway.app/documents/20/download"
+      }
+    ];
+
+    let deleteTargetId = null;
+    let activeFilter = "all";
+
+    // ── RENDER ───────────────────────────────────────────────────
+    function renderDocs() {
+      const list = document.getElementById("doc-list");
+      const filtered = activeFilter === "all" ? docs : docs.filter(d => d.course === activeFilter);
+
+      if (!filtered.length) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <p><strong>No materials found.</strong><br>Try a different filter, or upload a new file.</p>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(doc => `
+        <div class="doc-card" id="card-${doc.id}">
+          <div class="doc-icon">${doc.type}</div>
+          <div class="doc-info">
+            <div class="doc-title">${doc.title}</div>
+            <div class="doc-meta">
+              <span class="chip chip-course">${doc.course}</span>
+              <span class="chip chip-type">${doc.type}</span>
+              <span class="meta-sep">·</span>
+              <span class="meta-text">${doc.size}</span>
+              <span class="meta-sep">·</span>
+              <span class="meta-text">${doc.date}</span>
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a href="${doc.url}" class="btn-download" download>↓ Download</a>
+            <button class="btn-delete" onclick="openModal(${doc.id})">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function refreshFilter() {
+      const courses = [...new Set(docs.map(d => d.course))].sort();
+      const sel = document.getElementById("course-filter");
+      const current = sel.value;
+      sel.innerHTML = `<option value="all">All Course Codes</option>` +
+        courses.map(c => `<option value="${c}" ${c === current ? "selected" : ""}>${c}</option>`).join("");
+    }
+
+    function applyFilter() {
+      activeFilter = document.getElementById("course-filter").value;
+      renderDocs();
+    }
+
+    // ── PAGES ────────────────────────────────────────────────────
+    function showPage(page) {
+      document.getElementById("home-page").style.display   = page === "home"   ? "block" : "none";
+      document.getElementById("upload-page").style.display = page === "upload" ? "block" : "none";
+      document.getElementById("nav-home").classList.toggle("active",   page === "home");
+      document.getElementById("nav-upload").classList.toggle("active", page === "upload");
+      if (page === "home") { refreshFilter(); renderDocs(); }
+    }
+
+    // ── MODAL ────────────────────────────────────────────────────
+    function openModal(id) {
+      deleteTargetId = id;
+      const doc = docs.find(d => d.id === id);
+      document.getElementById("modal-doc-name").textContent = `"${doc.title}"`;
+      document.getElementById("delete-modal").classList.add("active");
+    }
+
+    function closeModal() {
+      document.getElementById("delete-modal").classList.remove("active");
+      deleteTargetId = null;
+    }
+
+    function confirmDelete() {
+      if (deleteTargetId === null) return;
+      docs = docs.filter(d => d.id !== deleteTargetId);
+      closeModal();
+      refreshFilter();
+      renderDocs();
+      showToast("File deleted.");
+    }
+
+    document.getElementById("delete-modal").addEventListener("click", function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // ── UPLOAD ───────────────────────────────────────────────────
+    let chosenFile = null;
+
+    function onFileChosen(input) {
+      chosenFile = input.files[0] || null;
+      document.getElementById("file-chosen").textContent = chosenFile ? `✓ ${chosenFile.name}` : "No file selected";
+    }
+
+    // Drag and drop
+    const dropZone = document.getElementById("file-drop");
+    dropZone.addEventListener("dragover",  e => { e.preventDefault(); dropZone.classList.add("dragover"); });
+    dropZone.addEventListener("dragleave", ()  => dropZone.classList.remove("dragover"));
+    dropZone.addEventListener("drop", e => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+      const f = e.dataTransfer.files[0];
+      if (f) {
+        chosenFile = f;
+        document.getElementById("file-chosen").textContent = `✓ ${f.name}`;
+      }
+    });
+
+    function submitUpload() {
+      const title  = document.getElementById("doc-title").value.trim();
+      const course = document.getElementById("course-code").value.trim().toUpperCase();
+
+      if (!title)  { showToast("Please enter a document title."); return; }
+      if (!course) { showToast("Please enter a course code."); return; }
+      if (!chosenFile) { showToast("Please choose a file."); return; }
+
+      const sizeMB = (chosenFile.size / 1048576).toFixed(2) + " MB";
+      const ext    = chosenFile.name.split(".").pop().toUpperCase();
+      const now    = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+      docs.push({
+        id:     Date.now(),
+        title:  title,
+        course: course,
+        type:   ext,
+        size:   sizeMB,
+        date:   now,
+        url:    "#"
+      });
+
+      // reset form
+      document.getElementById("doc-title").value = "";
+      document.getElementById("course-code").value = "";
+      document.getElementById("file-chosen").textContent = "No file selected";
+      chosenFile = null;
+
+      showPage("home");
+      showToast("File uploaded successfully!");
+    }
+
+    // ── TOAST ────────────────────────────────────────────────────
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove("show"), 3000);
+    }
+
+    // ── INIT ─────────────────────────────────────────────────────
+    refreshFilter();
+    renderDocs();
+  </script>
+</body>
+</html>
